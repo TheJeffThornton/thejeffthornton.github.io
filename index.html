@@ -133,6 +133,25 @@
 
     .also { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--rule); color: var(--slate); font-size: 16px; max-width: 80ch; }
 
+    /* Salesforce */
+    .sfdc { background: var(--cloud); border-top: 1px solid var(--rule); }
+    .caps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 2px solid var(--ink); }
+    .caps div { padding: 26px 24px 28px 0; }
+    .caps div + div { padding-left: 24px; border-left: 1px solid var(--rule); }
+    .caps h3 { font-size: 20px; font-weight: 700; }
+    .caps p { margin-top: 10px; font-size: 16px; color: #2E3D4A; }
+    .sfdc .note { margin-top: 32px; font-size: 16px; color: var(--slate); max-width: 80ch; }
+    @media (max-width: 900px) {
+      .caps { grid-template-columns: 1fr 1fr; }
+      .caps div:nth-child(3) { padding-left: 0; border-left: 0; }
+      .caps div:nth-child(n+3) { border-top: 1px solid var(--rule); }
+    }
+    @media (max-width: 560px) {
+      .caps { grid-template-columns: 1fr; }
+      .caps div, .caps div + div { padding: 22px 0; border-left: 0; }
+      .caps div + div { border-top: 1px solid var(--rule); }
+    }
+
     /* Career timeline */
     .timeline { list-style: none; margin: 0; padding: 0; position: relative; }
     .timeline::before { content: ""; position: absolute; left: 150px; top: 8px; bottom: 8px; width: 1px; background: var(--rule); }
@@ -208,6 +227,7 @@
         <button class="nav-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
         <ul class="nav" id="nav">
           <li><a href="#systems">Systems I've built</a></li>
+          <li><a href="#salesforce">Salesforce</a></li>
           <li><a href="#career">Career</a></li>
           <li><a href="#leadership">Leadership</a></li>
           <li><a href="#contact">Contact</a></li>
@@ -346,6 +366,22 @@
       </div>
     </section>
 
+    <section class="block sfdc" id="salesforce" aria-labelledby="sfdc-title">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="sfdc-title">A sales leader who can build the Salesforce org, not just run reports in it.</h2>
+          <p>I've built the sales foundation in Salesforce for my own teams and for consulting clients, from seed-stage startups through Series E companies and established enterprises. Certified in Salesforce Managed Services.</p>
+        </div>
+        <div class="caps">
+          <div><h3>Implementation</h3><p>Stood up Salesforce from the ground up so a sales team has one system of record from the first deal.</p></div>
+          <div><h3>Customization</h3><p>Fields, objects, and page layouts shaped around how the team actually sells, including redesigned opportunity stages that match the real buying process.</p></div>
+          <div><h3>Automation and cadences</h3><p>Automated workflows and sales cadences that move deals forward and take repetitive admin off reps' plates.</p></div>
+          <div><h3>Dashboards and integrations</h3><p>Dashboards leaders can run a forecast call from, and connected app stacks where the CRM and the rest of the GTM tools share data.</p></div>
+        </div>
+        <p class="note">Why it matters: a revenue leader who understands the CRM can fix process problems directly, instead of filing a ticket and waiting a quarter.</p>
+      </div>
+    </section>
+
     <section class="block" id="career" aria-labelledby="career-title">
       <div class="wrap">
         <div class="head">
@@ -370,7 +406,7 @@
             <div class="body">
               <h3>Director of Sales</h3>
               <p class="org">The Fury Group, Salesforce consulting partner</p>
-              <p class="txt">Hired, trained, and led a three-person enterprise account management team, built regional coverage with the Sandler methodology, and led the company's certification for Salesforce Managed Services, giving the team a new practice to sell.</p>
+              <p class="txt">Hired, trained, and led a three-person enterprise account management team, built regional coverage with the Sandler methodology, and led the company's certification for Salesforce Managed Services, giving the team a new practice to sell. Our engagements built the sales foundation in Salesforce for clients from seed stage through Series E and established companies: implementation, customization, automation, dashboards, and integrations.</p>
               <div class="proof">
                 <div><b>$3.8M</b><span>net-new SaaS ARR in 18 months</span></div>
               </div>
