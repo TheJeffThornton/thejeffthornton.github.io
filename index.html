@@ -102,7 +102,7 @@
     .system .result span { display: block; font-size: 15px; color: var(--slate); line-height: 1.5; margin-top: 4px; max-width: 44ch; }
     .system .stack { margin-top: 22px; font-size: 14px; color: var(--slate); }
     .system .stack strong { color: var(--ink); font-weight: 600; }
-    .facts { margin: 0; display: grid; gap: 22px; }
+    .facts { margin: 0; display: grid; gap: 22px; align-content: start; }
     .facts dt { font-weight: 700; font-size: 16px; }
     .facts dd { margin: 4px 0 0; font-size: 17px; color: #2E3D4A; max-width: 62ch; }
     details { margin-top: 4px; border-top: 1px solid var(--rule); padding-top: 16px; }
@@ -151,6 +151,46 @@
       .caps div, .caps div + div { padding: 22px 0; border-left: 0; }
       .caps div + div { border-top: 1px solid var(--rule); }
     }
+
+    /* Icons and visuals */
+    .ico { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 10px; background: var(--ink); color: var(--signal); margin-bottom: 16px; }
+    .ico svg { width: 24px; height: 24px; }
+    .panel { grid-column: 1 / -1; margin: 0; background: var(--cloud); border: 1px solid var(--rule); border-radius: 8px; padding: clamp(22px, 3.5vw, 36px); }
+    .panel h4 { margin: 0 0 20px; font-size: 17px; font-weight: 700; }
+    .rubric { display: grid; gap: 12px; }
+    .rrow { display: grid; grid-template-columns: 250px 1fr 48px; gap: 16px; align-items: center; font-size: 15px; }
+    .rrow .rb { height: 14px; background: var(--rule); border-radius: 7px; overflow: hidden; }
+    .rrow .rb i { display: block; height: 100%; background: var(--ink); border-radius: 7px; }
+    .rrow b { text-align: right; font-weight: 700; }
+    .grades { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; font-size: 14px; }
+    .grades span { padding: 6px 12px; border-radius: 999px; background: var(--white); border: 1px solid var(--rule); }
+    .grades span:first-child { background: var(--ink); color: var(--white); border-color: var(--ink); }
+    .flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; counter-reset: step; }
+    .flow li { background: var(--white); border: 1px solid var(--rule); border-radius: 8px; padding: 20px; position: relative; counter-increment: step; }
+    .flow li::before { content: counter(step); display: inline-flex; width: 28px; height: 28px; border-radius: 50%; background: var(--signal); color: var(--ink); font-weight: 700; font-size: 14px; align-items: center; justify-content: center; margin-bottom: 12px; }
+    .flow li:not(:last-child)::after { content: ""; position: absolute; right: -11px; top: 32px; width: 8px; height: 8px; border-top: 2px solid var(--slate); border-right: 2px solid var(--slate); transform: rotate(45deg); }
+    .flow b { display: block; font-size: 17px; }
+    .flow span { display: block; margin-top: 6px; font-size: 14px; color: var(--slate); line-height: 1.5; }
+    @media (max-width: 900px) {
+      .flow { grid-template-columns: 1fr 1fr; }
+      .flow li::after { display: none; }
+      .rrow { grid-template-columns: 1fr 40px; }
+      .rrow .rb { grid-column: 1 / -1; grid-row: 2; }
+    }
+    @media (max-width: 560px) { .flow { grid-template-columns: 1fr; } }
+
+    /* Hero network */
+    .hero { position: relative; }
+    .net { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.55; }
+    .hero .wrap { position: relative; }
+    /* Employer tiles */
+    .stop .titlerow { display: flex; align-items: center; gap: 16px; }
+    .mono { flex: none; width: 54px; height: 54px; border-radius: 12px; background: var(--ink); color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; letter-spacing: -0.01em; box-shadow: inset 0 -3px 0 var(--signal); }
+    .stop.now .mono { background: var(--signal); color: var(--ink); box-shadow: inset 0 -3px 0 var(--ink); }
+    /* Toolkit */
+    .toolkit { margin-top: 36px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .toolkit strong { font-size: 15px; margin-right: 6px; }
+    .toolkit span { font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 999px; background: var(--cloud); border: 1px solid var(--rule); }
 
     /* Career timeline */
     .timeline { list-style: none; margin: 0; padding: 0; position: relative; }
@@ -238,6 +278,7 @@
 
   <main id="main">
     <section class="hero" id="top">
+      <canvas class="net" aria-hidden="true"></canvas>
       <div class="wrap">
         <div class="hero-grid">
           <div>
@@ -337,11 +378,12 @@
             <div><dt>The problem</dt><dd>Before a first call, reps pieced together company profile, network footprint, buying signals, and contacts by hand, with no consistent way to judge whether an account deserved their time.</dd></div>
             <div><dt>What it does</dt><dd>Researches the account live and returns one standard report: a 100-point score with the breakdown visible so reps can challenge it, a lead product play tied to a specific researched fact, target buyer roles with ready-to-click search links, and a personalized cold email and LinkedIn note. Follow-up commands expand contacts, competitors, signals, or a Salesforce-ready CRM entry.</dd></div>
             <div><dt>Why reps trust it</dt><dd>Every data point is tagged verified, reported, or inferred. Every report carries a confidence score. The playbook forbids invented contacts and would rather show a gap than fill it with fiction.</dd></div>
-            <details>
-              <summary>How the scoring works</summary>
-              <p>Six weighted factors: bandwidth intensity of the business, site and data center footprint, buying signals weighted by recency, network sophistication, product fit, and buyer accessibility. Grades run from Elite to Pass, and the playbook says "Pass" plainly when an account isn't worth the time.</p>
-            </details>
           </dl>
+          <figure class="panel" aria-labelledby="rubric-title">
+            <h4 id="rubric-title">How every account is scored, out of 100</h4>
+            <div class="rubric"><div class="rrow"><span>Bandwidth intensity of the business</span><div class="rb"><i style="width:100%"></i></div><b>20</b></div><div class="rrow"><span>Site and data center footprint</span><div class="rb"><i style="width:100%"></i></div><b>20</b></div><div class="rrow"><span>Buying signals, weighted by recency</span><div class="rb"><i style="width:100%"></i></div><b>20</b></div><div class="rrow"><span>Network sophistication</span><div class="rb"><i style="width:75%"></i></div><b>15</b></div><div class="rrow"><span>Product fit</span><div class="rb"><i style="width:75%"></i></div><b>15</b></div><div class="rrow"><span>Buyer accessibility</span><div class="rb"><i style="width:50%"></i></div><b>10</b></div></div>
+            <div class="grades"><span>Elite 90+</span><span>Strong 80 to 89</span><span>Qualified 70 to 79</span><span>Nurture 55 to 69</span><span>Pass below 55</span></div>
+          </figure>
         </article>
 
         <article class="system">
@@ -356,13 +398,21 @@
           </div>
           <dl class="facts">
             <div><dt>The problem</dt><dd>Whether prospecting a new logo or managing an existing account, reps spent anywhere from tens of minutes to hours per account scraping websites, job boards, and news for something worth saying, and the emails still came out generic.</dd></div>
-            <div><dt>What it does</dt><dd>Gathers the signals a rep would otherwise hunt for by hand: open roles posted on LinkedIn, which show where the company is investing; growth, funding, expansion, and relocation news; and the buyer roles to engage, from CISOs and CTOs to VPs of IT and cloud engineers. It then drafts a persona-specific email built on the strongest hook it found.</dd></div>
-            <div><dt>Keeps the CRM current</dt><dd>The role map shows which stakeholders the account record is missing, so reps add new contacts to the CRM before they reach out, not after.</dd></div>
             <div><dt>Hours become minutes</dt><dd>Account research that used to take hours comes back as one structured output in minutes. Reps review, edit, and send from their own accounts.</dd></div>
           </dl>
+          <figure class="panel" aria-labelledby="flow-title">
+            <h4 id="flow-title">From account name to ready-to-send email</h4>
+            <ol class="flow">
+              <li><b>Pull signals</b><span>Open roles on LinkedIn, plus growth, funding, expansion, and relocation news.</span></li>
+              <li><b>Map the buyers</b><span>CISOs, CTOs, VPs of IT, and cloud engineering leaders for the account.</span></li>
+              <li><b>Update the CRM</b><span>Flag stakeholders missing from the account record so reps add them first.</span></li>
+              <li><b>Draft the email</b><span>A persona-specific message built on the strongest hook found.</span></li>
+            </ol>
+          </figure>
         </article>
 
         <p class="also">Also built: a browser-based tool that helps account managers produce paste-ready internal pricing and credit submissions. Source code for these tools stays private because it references internal workflows.</p>
+        <div class="toolkit"><strong>Toolkit</strong><span>Python</span><span>pandas</span><span>REST APIs</span><span>PeeringDB</span><span>Salesforce</span><span>Custom GPTs</span><span>Claude</span><span>ChatGPT</span><span>Prompt engineering</span><span>Excel automation</span></div>
       </div>
     </section>
 
@@ -373,10 +423,10 @@
           <p>I've built the sales foundation in Salesforce for my own teams and for consulting clients, from seed-stage startups through Series E companies and established enterprises. Certified in Salesforce Managed Services.</p>
         </div>
         <div class="caps">
-          <div><h3>Implementation</h3><p>Stood up Salesforce from the ground up so a sales team has one system of record from the first deal.</p></div>
-          <div><h3>Customization</h3><p>Fields, objects, and page layouts shaped around how the team actually sells, including redesigned opportunity stages that match the real buying process.</p></div>
-          <div><h3>Automation and cadences</h3><p>Automated workflows and sales cadences that move deals forward and take repetitive admin off reps' plates.</p></div>
-          <div><h3>Dashboards and integrations</h3><p>Dashboards leaders can run a forecast call from, and connected app stacks where the CRM and the rest of the GTM tools share data.</p></div>
+          <div><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 7.5l9 4.5 9-4.5z"/><path d="m3 12 9 4.5 9-4.5"/><path d="m3 16.5 9 4.5 9-4.5"/></svg></span><h3>Implementation</h3><p>Stood up Salesforce from the ground up so a sales team has one system of record from the first deal.</p></div>
+          <div><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></span><h3>Customization</h3><p>Fields, objects, and page layouts shaped around how the team actually sells, including redesigned opportunity stages that match the real buying process.</p></div>
+          <div><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.6-4.5L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.6 4.5L20 16"/><path d="M20 20v-4h-4"/><path d="M12 9v3l2 1.5"/></svg></span><h3>Automation and cadences</h3><p>Automated workflows and sales cadences that move deals forward and take repetitive admin off reps' plates.</p></div>
+          <div><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 17v-4M11 17V8M15 17v-6M19 17V6" transform="translate(-1 0)"/></svg></span><h3>Dashboards and integrations</h3><p>Dashboards leaders can run a forecast call from, and connected app stacks where the CRM and the rest of the GTM tools share data.</p></div>
         </div>
         <p class="note">Why it matters: a revenue leader who understands the CRM can fix process problems directly, instead of filing a ticket and waiting a quarter.</p>
       </div>
@@ -392,8 +442,8 @@
           <li class="stop now">
             <div class="when">2024 to now</div>
             <div class="body">
-              <h3>Sales Manager</h3>
-              <p class="org">Cogent Communications, enterprise connectivity provider, San Francisco Bay Area</p>
+              <div class="titlerow"><span class="mono" aria-hidden="true">CO</span><div><h3>Sales Manager</h3>
+              <p class="org">Cogent Communications, enterprise connectivity provider, San Francisco Bay Area</p></div></div>
               <p class="txt">Lead about ten Regional, National, and Global Account Managers across three Bay Area teams selling enterprise connectivity, cloud on-ramps, and data center services. Built the prospecting engine, AI research playbook, and AI outreach playbook above and made them part of the team's weekly rhythm.</p>
               <div class="proof">
                 <div><b>$138K to $434K</b><span>pipeline tied to the outreach playbook</span></div>
@@ -404,8 +454,8 @@
           <li class="stop">
             <div class="when">2021 to 2023</div>
             <div class="body">
-              <h3>Director of Sales</h3>
-              <p class="org">The Fury Group, Salesforce consulting partner</p>
+              <div class="titlerow"><span class="mono" aria-hidden="true">FG</span><div><h3>Director of Sales</h3>
+              <p class="org">The Fury Group, Salesforce consulting partner</p></div></div>
               <p class="txt">Hired, trained, and led a three-person enterprise account management team, built regional coverage with the Sandler methodology, and led the company's certification for Salesforce Managed Services, giving the team a new practice to sell. Our engagements built the sales foundation in Salesforce for clients from seed stage through Series E and established companies: implementation, customization, automation, dashboards, and integrations.</p>
               <div class="proof">
                 <div><b>$3.8M</b><span>net-new SaaS ARR in 18 months</span></div>
@@ -415,8 +465,8 @@
           <li class="stop">
             <div class="when">2013 to 2021</div>
             <div class="body">
-              <h3>Senior Enterprise Account Executive II</h3>
-              <p class="org">AT&amp;T Technology Solutions</p>
+              <div class="titlerow"><span class="mono" aria-hidden="true">AT&amp;T</span><div><h3>Senior Enterprise Account Executive II</h3>
+              <p class="org">AT&amp;T Technology Solutions</p></div></div>
               <p class="txt">Owned the full cycle on Fortune 1000 accounts with long procurement cycles and entrenched incumbents: mapped decision makers, led solution design with engineering for cloud connectivity, hub-and-spoke networks, dedicated services, and security, and negotiated multi-year agreements.</p>
               <div class="proof">
                 <div><b>205 to 250%</b><span>of quota</span></div>
@@ -429,8 +479,8 @@
           <li class="stop">
             <div class="when">2008 to 2013</div>
             <div class="body">
-              <h3>Sales &amp; Operations Manager</h3>
-              <p class="org">Comcast, San Francisco Bay Area</p>
+              <div class="titlerow"><span class="mono" aria-hidden="true">CC</span><div><h3>Sales &amp; Operations Manager</h3>
+              <p class="org">Comcast, San Francisco Bay Area</p></div></div>
               <p class="txt">Managed 35 or more employees across three locations at once and rebuilt the operating routines and coaching cadence. The systems were adopted as regional best practices.</p>
               <div class="proof">
                 <div><b>70th to 92nd</b><span>NPS percentile nationally</span></div>
@@ -448,10 +498,10 @@
           <p>Every team I've run gets the same four things. They're routines, not slogans, and they produced the results above.</p>
         </div>
         <div class="principles">
-          <div><h3>Focus before activity</h3><p>Reps can't work every account. I build the territory and ideal-customer view first, so the team spends time where deals are most likely to close and most valuable when they do.</p></div>
-          <div><h3>Coaching with a standard</h3><p>Sandler-trained and metrics-driven. I've carried a bag at top-10-percent levels, and I hold teams to that floor through weekly one-on-ones, deal reviews, and clear expectations.</p></div>
-          <div><h3>Pipeline you can see</h3><p>You can't coach what you can't see. My teams get account and funnel intelligence before they get a new quota, so forecast calls are about specific deals and next steps.</p></div>
-          <div><h3>One team across functions</h3><p>Complex deals are won with engineering, product, and operations in the room. I've sold alongside sales engineers, run a team at a Salesforce partner, and run field operations, so I speak each group's language.</p></div>
+          <div><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.8" fill="currentColor"/></svg></span><h3>Focus before activity</h3><p>Reps can't work every account. I build the territory and ideal-customer view first, so the team spends time where deals are most likely to close and most valuable when they do.</p></div>
+          <div><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18 9 13l3.5 3.5L20 9"/><path d="M15 9h5v5"/></svg></span><h3>Coaching with a standard</h3><p>Sandler-trained and metrics-driven. I've carried a bag at top-10-percent levels, and I hold teams to that floor through weekly one-on-ones, deal reviews, and clear expectations.</p></div>
+          <div><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg></span><h3>Pipeline you can see</h3><p>You can't coach what you can't see. My teams get account and funnel intelligence before they get a new quota, so forecast calls are about specific deals and next steps.</p></div>
+          <div><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="2.5"/><circle cx="18" cy="7" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8.3 8.4 10.7 15.8M15.7 8.4 13.3 15.8M8.5 7h7"/></svg></span><h3>One team across functions</h3><p>Complex deals are won with engineering, product, and operations in the room. I've sold alongside sales engineers, run a team at a Salesforce partner, and run field operations, so I speak each group's language.</p></div>
         </div>
         <p class="creds">Certifications: Salesforce Managed Services, Sandler Sales.</p>
       </div>
@@ -496,6 +546,40 @@
       if (!('IntersectionObserver' in window)) { f.classList.add('in'); return; }
       var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { f.classList.add('in'); io.disconnect(); } }); }, { threshold: 0.35 });
       io.observe(f);
+    })();
+
+    (function () {
+      var c = document.querySelector('.net'); if (!c || !c.getContext) return;
+      var x = c.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 2), W, H, nodes = [], edges = [], pulses = [];
+      var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var seed = 7; function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+      function build() {
+        W = c.clientWidth; H = c.clientHeight; c.width = W * dpr; c.height = H * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
+        seed = 7; nodes = []; edges = [];
+        var n = Math.round(Math.max(18, Math.min(46, W / 30)));
+        for (var i = 0; i < n; i++) nodes.push({ x: rnd() * W, y: rnd() * H, r: rnd() < 0.18 ? 2.6 : 1.6 });
+        for (var a = 0; a < n; a++) {
+          var d = nodes.map(function (p, b) { return { b: b, d: Math.hypot(p.x - nodes[a].x, p.y - nodes[a].y) }; }).sort(function (u, v) { return u.d - v.d; });
+          for (var k = 1; k <= 2; k++) if (a < d[k].b) edges.push([a, d[k].b]);
+        }
+        pulses = edges.filter(function () { return rnd() < 0.35; }).map(function (e) { return { e: e, t: rnd(), s: 0.0016 + rnd() * 0.0028 }; });
+      }
+      function draw() {
+        x.clearRect(0, 0, W, H);
+        x.strokeStyle = 'rgba(169,182,194,0.16)'; x.lineWidth = 1;
+        edges.forEach(function (e) { var p = nodes[e[0]], q = nodes[e[1]]; x.beginPath(); x.moveTo(p.x, p.y); x.lineTo(q.x, q.y); x.stroke(); });
+        nodes.forEach(function (p) { x.fillStyle = p.r > 2 ? 'rgba(216,149,43,0.75)' : 'rgba(169,182,194,0.45)'; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.283); x.fill(); });
+        pulses.forEach(function (u) {
+          var p = nodes[u.e[0]], q = nodes[u.e[1]], px = p.x + (q.x - p.x) * u.t, py = p.y + (q.y - p.y) * u.t;
+          var g = x.createRadialGradient(px, py, 0, px, py, 7); g.addColorStop(0, 'rgba(231,165,62,0.95)'); g.addColorStop(1, 'rgba(231,165,62,0)');
+          x.fillStyle = g; x.beginPath(); x.arc(px, py, 7, 0, 6.283); x.fill();
+          if (!still) { u.t += u.s; if (u.t > 1) u.t = 0; }
+        });
+        if (!still && !document.hidden) requestAnimationFrame(draw);
+      }
+      build(); draw();
+      var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { build(); if (still) draw(); }, 150); });
+      document.addEventListener('visibilitychange', function () { if (!document.hidden && !still) requestAnimationFrame(draw); });
     })();
   </script>
 </body>
